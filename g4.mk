@@ -372,7 +372,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libqsap_shim \
     libcne_shim \
-    libqsap_shim \
     libfence_shim \
     ims_rtp_shim
 
