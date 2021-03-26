@@ -42,10 +42,8 @@
         <version>2.4</version>
         <interface>
             <name>ICameraProvider</name>
-            <instance>external/0</instance>
             <instance>legacy/0</instance>
         </interface>
-        <fqname>@2.4::ICameraProvider/external/0</fqname>
         <fqname>@2.4::ICameraProvider/legacy/0</fqname>
     </hal>
     <hal format="hidl">
