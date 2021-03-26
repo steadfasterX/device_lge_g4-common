@@ -69,6 +69,9 @@ static int camera_device_open(const hw_module_t *module, const char *name,
 static int camera_device_close(hw_device_t* device);
 static int camera_get_number_of_cameras(void);
 static int camera_get_camera_info(int camera_id, struct camera_info *info);
+static void camera_get_vendor_tag_ops(vendor_tag_ops_t* ops);
+static int camera_set_torch_mode(const char* camera_id, bool enabled);
+static int camera_init();
 
 static struct hw_module_methods_t camera_module_methods = {
     .open = camera_device_open
@@ -89,10 +92,10 @@ camera_module_t HAL_MODULE_INFO_SYM = {
     .get_number_of_cameras = camera_get_number_of_cameras,
     .get_camera_info = camera_get_camera_info,
     .set_callbacks = NULL, /* remove compilation warnings */
-    .get_vendor_tag_ops = NULL, /* remove compilation warnings */
+    .get_vendor_tag_ops =camera_get_vendor_tag_ops,
     .open_legacy = NULL, /* remove compilation warnings */
-    .set_torch_mode = NULL, /* remove compilation warnings */
-    .init = NULL, /* remove compilation warnings */
+    .set_torch_mode = camera_set_torch_mode, 
+    .init = camera_init,
     .reserved = {0}, /* remove compilation warnings */
 };
 
@@ -116,6 +119,7 @@ static camera_notify_callback sNotifCb;
 #define CAMERA_ID(device) (((wrapper_camera_device_t *)(device))->id)
 
 static void notify_intercept(int32_t msg, int32_t b, int32_t c, void *cookie) {
+    ALOGV("In notify_intercept now");
     if (msg == CAMERA_MSG_FOCUS) {
         ALOGV("GOT FOCUS MESSAGE: %d",b);
     } else if (msg == CAMERA_MSG_FOCUS_MOVE && b == 1) {
@@ -131,7 +135,9 @@ static void notify_intercept(int32_t msg, int32_t b, int32_t c, void *cookie) {
 static int check_vendor_module()
 {
     int rv = 0;
+    ALOGV("In check_vendor_module");
     ALOGV("%s", __FUNCTION__);
+
 
     if (gVendorModule)
         return 0;
@@ -354,6 +360,7 @@ static char *camera_fixup_setparams(int id, const char *settings)
 static int camera_set_preview_window(struct camera_device *device,
         struct preview_stream_ops *window)
 {
+    ALOGV("In camera_set_preview_window now");
     if (!device)
         return -EINVAL;
 
@@ -370,6 +377,7 @@ static void camera_set_callbacks(struct camera_device *device,
         camera_request_memory get_memory,
         void *user)
 {
+    
     if (!device)
         return;
 
@@ -828,4 +836,28 @@ static int camera_get_camera_info(int camera_id, struct camera_info *info)
     if (check_vendor_module())
         return 0;
     return gVendorModule->get_camera_info(camera_id, info);
+}
+
+static void camera_get_vendor_tag_ops(vendor_tag_ops_t* ops)
+{
+    ALOGV("In camera_get_vendor_tag_ops, %s", __FUNCTION__);
+    if (check_vendor_module())
+        return;
+    return gVendorModule->get_vendor_tag_ops(ops);
+}
+
+static int camera_set_torch_mode(const char* camera_id, bool enabled)
+{
+    ALOGV("In camera_set_torch_mode now, %s", __FUNCTION__);
+    if (check_vendor_module())
+        return 0;
+    return gVendorModule->set_torch_mode(camera_id, enabled);
+}
+
+static int camera_init()
+{
+    ALOGV("In camera_init now, %s", __FUNCTION__);
+    if (check_vendor_module())
+        return 0;
+    return gVendorModule->init();
 }
