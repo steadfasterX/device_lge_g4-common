@@ -135,7 +135,7 @@ static void notify_intercept(int32_t msg, int32_t b, int32_t c, void *cookie) {
 static int check_vendor_module()
 {
     int rv = 0;
-    ALOGI("In check_vendor_module now, called by %s", __builtin_FUNCTION());
+    ALOGI("In check_vendor_module now,%s", __FUNCTION__);
 
     if (gVendorModule)
         return 0;
@@ -684,7 +684,7 @@ static int camera_device_close(hw_device_t *device)
     int ret = 0;
     wrapper_camera_device_t *wrapper_dev = NULL;
 
-    ALOGI("In camera_device_close now, called by %s", __builtin_FUNCTION());
+    ALOGI("In camera _device_close now, %s", __FUNCTION__);
 
     android::Mutex::Autolock lock(gCameraWrapperLock);
 
@@ -727,14 +727,13 @@ static int camera_device_open(const hw_module_t *module, const char *name,
 
     android::Mutex::Autolock lock(gCameraWrapperLock);
 
-    ALOGI("In camera_device now, called by  %s", __builtin_FUNCTION());
+    ALOGI("In camera_device now, %s", __FUNCTION__);
 
     if (name != NULL) {
         if (check_vendor_module())
             return -EINVAL;
 
         cameraid = atoi(name);
-        ALOGI("In camera_device, cameraid %d", cameraid);
         num_cameras = gVendorModule->get_number_of_cameras();
 
         if (cameraid > num_cameras) {
@@ -823,7 +822,7 @@ fail:
 
 static int camera_get_number_of_cameras(void)
 {
-    ALOGI("In camera_get_number of cameras now, called by %s", __builtin_FUNCTION());
+    ALOGI("In camera_get_number of cameras now, %s", __FUNCTION__);
     if (check_vendor_module())
         return 0;
     ALOGI("%s : Number of camers: %d", __FUNCTION__,gVendorModule->get_number_of_cameras());
@@ -832,7 +831,7 @@ static int camera_get_number_of_cameras(void)
 
 static int camera_get_camera_info(int camera_id, struct camera_info *info)
 {
-    ALOGI("In camera_get_camera_info now, called by  %s", __builtin_FUNCTION());
+    ALOGI("In camera_get_camera_info now, %s", __FUNCTION__);
     if (check_vendor_module())
         return 0;
     ALOGI("%s : CameraInfo : %d ", __FUNCTION__, gVendorModule->get_camera_info(camera_id, info));
@@ -841,7 +840,7 @@ static int camera_get_camera_info(int camera_id, struct camera_info *info)
 
 static void camera_get_vendor_tag_ops(vendor_tag_ops_t* ops)
 {
-    ALOGI("In camera_get_vendor_tag_ops now, called by %s", __builtin_FUNCTION());
+    ALOGI("In camera_get_vendor_tag_ops, %s", __FUNCTION__);
     if (check_vendor_module())
         return;
     return gVendorModule->get_vendor_tag_ops(ops);
@@ -849,7 +848,7 @@ static void camera_get_vendor_tag_ops(vendor_tag_ops_t* ops)
 
 static int camera_set_torch_mode(const char* camera_id, bool enabled)
 {
-    ALOGI("In camera_set_torch_mode now, called by %s", __builtin_FUNCTION());
+    ALOGI("In camera_set_torch_mode now, %s", __FUNCTION__);
     if (check_vendor_module())
         return 0;
     return gVendorModule->set_torch_mode(camera_id, enabled);
@@ -857,7 +856,7 @@ static int camera_set_torch_mode(const char* camera_id, bool enabled)
 
 static int camera_init()
 {
-    ALOGI("In camera_init now, called by %s", __builtin_FUNCTION());
+    ALOGI("In camera_init now, %s", __FUNCTION__);
     if (check_vendor_module())
         return 0;
     ALOGI("%s : Camera_init value : %d", __FUNCTION__, gVendorModule->init());
