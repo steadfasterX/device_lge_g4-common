@@ -137,7 +137,6 @@ static int check_vendor_module()
     int rv = 0;
     ALOGI("In check_vendor_module now,%s", __FUNCTION__);
 
-
     if (gVendorModule)
         return 0;
 
@@ -826,6 +825,7 @@ static int camera_get_number_of_cameras(void)
     ALOGI("In camera_get_number of cameras now, %s", __FUNCTION__);
     if (check_vendor_module())
         return 0;
+    ALOGI("%s : Number of camers: %d", __FUNCTION__,gVendorModule->get_number_of_cameras());
     return gVendorModule->get_number_of_cameras();
 }
 
@@ -834,6 +834,7 @@ static int camera_get_camera_info(int camera_id, struct camera_info *info)
     ALOGI("In camera_get_camera_info now, %s", __FUNCTION__);
     if (check_vendor_module())
         return 0;
+    ALOGI("%s : CameraInfo : %d ", __FUNCTION__, gVendorModule->get_camera_info(camera_id, info));
     return gVendorModule->get_camera_info(camera_id, info);
 }
 
@@ -858,5 +859,6 @@ static int camera_init()
     ALOGI("In camera_init now, %s", __FUNCTION__);
     if (check_vendor_module())
         return 0;
+    ALOGI("%s : Camera_init value : %d", __FUNCTION__, gVendorModule->init());
     return gVendorModule->init();
 }
