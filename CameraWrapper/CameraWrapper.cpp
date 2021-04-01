@@ -80,7 +80,7 @@ static struct hw_module_methods_t camera_module_methods = {
 camera_module_t HAL_MODULE_INFO_SYM = {
     .common = {
          .tag = HARDWARE_MODULE_TAG,
-         .module_api_version = CAMERA_MODULE_API_VERSION_2_4,
+         .module_api_version = CAMERA_MODULE_API_VERSION_2_0,
          .hal_api_version = HARDWARE_HAL_API_VERSION,
          .id = CAMERA_HARDWARE_MODULE_ID,
          .name = "G4 Camera Wrapper",
@@ -823,6 +823,7 @@ fail:
 static int camera_get_number_of_cameras(void)
 {
     ALOGI("In camera_get_number of cameras now, %s", __FUNCTION__);
+    ALOGI("MODULE API VERSION 2_0");
     if (check_vendor_module())
         return 0;
     ALOGI("%s : Number of camers: %d", __FUNCTION__,gVendorModule->get_number_of_cameras());
