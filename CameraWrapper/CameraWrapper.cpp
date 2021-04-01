@@ -70,6 +70,7 @@ static int camera_device_close(hw_device_t* device);
 static int camera_get_number_of_cameras(void);
 static int camera_get_camera_info(int camera_id, struct camera_info *info);
 static void camera_get_vendor_tag_ops(vendor_tag_ops_t* ops);
+static int camera_set_callbacks(const camera_module_callbacks_t *callbacks)
 static int camera_set_torch_mode(const char* camera_id, bool enabled);
 static int camera_init();
 
@@ -80,7 +81,7 @@ static struct hw_module_methods_t camera_module_methods = {
 camera_module_t HAL_MODULE_INFO_SYM = {
     .common = {
          .tag = HARDWARE_MODULE_TAG,
-         .module_api_version = CAMERA_MODULE_API_VERSION_2_0,
+         .module_api_version = CAMERA_MODULE_API_VERSION_2_1,
          .hal_api_version = HARDWARE_HAL_API_VERSION,
          .id = CAMERA_HARDWARE_MODULE_ID,
          .name = "G4 Camera Wrapper",
@@ -91,7 +92,7 @@ camera_module_t HAL_MODULE_INFO_SYM = {
     },
     .get_number_of_cameras = camera_get_number_of_cameras,
     .get_camera_info = camera_get_camera_info,
-    .set_callbacks = NULL, /* remove compilation warnings */
+    .set_callbacks = camera_set_callbacks,
     .get_vendor_tag_ops =camera_get_vendor_tag_ops,
     .open_legacy = NULL, /* remove compilation warnings */
     .set_torch_mode = camera_set_torch_mode, 
@@ -368,7 +369,7 @@ static int camera_set_preview_window(struct camera_device *device,
     return VENDOR_CALL(device, set_preview_window, window);
 }
 
-static void camera_set_callbacks(struct camera_device *device,
+/*static void camera_set_callbacks(struct camera_device *device,
         camera_notify_callback notify_cb,
         camera_data_callback data_cb,
         camera_data_timestamp_callback data_cb_timestamp,
@@ -385,6 +386,15 @@ static void camera_set_callbacks(struct camera_device *device,
     sNotifCb = notify_cb;
     VENDOR_CALL(device, set_callbacks, notify_intercept, data_cb, data_cb_timestamp,
             get_memory, user);
+}
+*/
+
+static int camera_set_callbacks(const camera_module_callbacks_t *callbacks)
+{
+    ALOGI("%s", __FUNCTION__);
+    if (check_vendor_module())
+        return 0;
+    return gVendorModule->set_callbacks(callbacks);
 }
 
 static void camera_enable_msg_type(struct camera_device *device,
@@ -823,7 +833,7 @@ fail:
 static int camera_get_number_of_cameras(void)
 {
     ALOGI("In camera_get_number of cameras now, %s", __FUNCTION__);
-    ALOGI("MODULE API VERSION 2_0");
+    ALOGI("MODULE API VERSION 2_1");
     if (check_vendor_module())
         return 0;
     ALOGI("%s : Number of camers: %d", __FUNCTION__,gVendorModule->get_number_of_cameras());
