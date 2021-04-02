@@ -81,7 +81,7 @@ static struct hw_module_methods_t camera_module_methods = {
 camera_module_t HAL_MODULE_INFO_SYM = {
     .common = {
          .tag = HARDWARE_MODULE_TAG,
-         .module_api_version = CAMERA_MODULE_API_VERSION_2_2,
+         .module_api_version = CAMERA_MODULE_API_VERSION_1_0,
          .hal_api_version = HARDWARE_HAL_API_VERSION,
          .id = CAMERA_HARDWARE_MODULE_ID,
          .name = "G4 Camera Wrapper",
@@ -92,11 +92,11 @@ camera_module_t HAL_MODULE_INFO_SYM = {
     },
     .get_number_of_cameras = camera_get_number_of_cameras,
     .get_camera_info = camera_get_camera_info,
-    .set_callbacks = camera_set_callbacks,
-    .get_vendor_tag_ops =camera_get_vendor_tag_ops,
+    .set_callbacks = NULL,
+    .get_vendor_tag_ops =NULL,
     .open_legacy = NULL, /* remove compilation warnings */
     .set_torch_mode = NULL, /* remove compilation warnings */
-    .init = camera_init,
+    .init = NULL,
     .reserved = {0}, /* remove compilation warnings */
 };
 
@@ -783,7 +783,7 @@ static int camera_device_open(const hw_module_t *module, const char *name,
         memset(camera_ops, 0, sizeof(*camera_ops));
 
         camera_device->base.common.tag = HARDWARE_DEVICE_TAG;
-        camera_device->base.common.version = CAMERA_DEVICE_API_VERSION_3_2;
+        camera_device->base.common.version = HARDWARE_DEVICE_API_VERSION(1, 0);
         camera_device->base.common.module = (hw_module_t *)(module);
         camera_device->base.common.close = camera_device_close;
         camera_device->base.ops = camera_ops;
