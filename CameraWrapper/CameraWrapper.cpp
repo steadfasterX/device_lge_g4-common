@@ -81,7 +81,7 @@ static struct hw_module_methods_t camera_module_methods = {
 camera_module_t HAL_MODULE_INFO_SYM = {
     .common = {
          .tag = HARDWARE_MODULE_TAG,
-         .module_api_version = CAMERA_MODULE_API_VERSION_2_1,
+         .module_api_version = CAMERA_MODULE_API_VERSION_2_2,
          .hal_api_version = HARDWARE_HAL_API_VERSION,
          .id = CAMERA_HARDWARE_MODULE_ID,
          .name = "G4 Camera Wrapper",
@@ -95,7 +95,7 @@ camera_module_t HAL_MODULE_INFO_SYM = {
     .set_callbacks = camera_set_callbacks,
     .get_vendor_tag_ops =camera_get_vendor_tag_ops,
     .open_legacy = NULL, /* remove compilation warnings */
-    .set_torch_mode = camera_set_torch_mode, 
+    .set_torch_mode = NULL, /* remove compilation warnings */
     .init = camera_init,
     .reserved = {0}, /* remove compilation warnings */
 };
@@ -369,7 +369,7 @@ static int camera_set_preview_window(struct camera_device *device,
     return VENDOR_CALL(device, set_preview_window, window);
 }
 
-static void camera_set_callbacks(struct camera_device *device,
+static void camera_set_callBacks(struct camera_device *device,
         camera_notify_callback notify_cb,
         camera_data_callback data_cb,
         camera_data_timestamp_callback data_cb_timestamp,
@@ -389,13 +389,13 @@ static void camera_set_callbacks(struct camera_device *device,
 }
 
 
-/*static int camera_set_callbacks(const camera_module_callbacks_t *callbacks)
+static int camera_set_callbacks(const camera_module_callbacks_t *callbacks)
 {
     ALOGI("%s", __FUNCTION__);
     if (check_vendor_module())
         return 0;
     return gVendorModule->set_callbacks(callbacks);
-}*/
+}
 
 static void camera_enable_msg_type(struct camera_device *device,
         int32_t msg_type)
@@ -789,7 +789,7 @@ static int camera_device_open(const hw_module_t *module, const char *name,
         camera_device->base.ops = camera_ops;
 
         camera_ops->set_preview_window = camera_set_preview_window;
-        camera_ops->set_callbacks = camera_set_callbacks;
+        camera_ops->set_callbacks = camera_set_callBacks;
         camera_ops->enable_msg_type = camera_enable_msg_type;
         camera_ops->disable_msg_type = camera_disable_msg_type;
         camera_ops->msg_type_enabled = camera_msg_type_enabled;
@@ -833,7 +833,7 @@ fail:
 static int camera_get_number_of_cameras(void)
 {
     ALOGI("In camera_get_number of cameras now, %s", __FUNCTION__);
-    ALOGI("MODULE API VERSION 2_1");
+    ALOGI("MODULE API VERSION 2_2");
     if (check_vendor_module())
         return 0;
     ALOGI("%s : Number of camers: %d", __FUNCTION__,gVendorModule->get_number_of_cameras());
