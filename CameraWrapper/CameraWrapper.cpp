@@ -369,7 +369,7 @@ static int camera_set_preview_window(struct camera_device *device,
     return VENDOR_CALL(device, set_preview_window, window);
 }
 
-/*static void camera_set_callbacks(struct camera_device *device,
+static void camera_set_callbacks(struct camera_device *device,
         camera_notify_callback notify_cb,
         camera_data_callback data_cb,
         camera_data_timestamp_callback data_cb_timestamp,
@@ -387,15 +387,15 @@ static int camera_set_preview_window(struct camera_device *device,
     VENDOR_CALL(device, set_callbacks, notify_intercept, data_cb, data_cb_timestamp,
             get_memory, user);
 }
-*/
 
-static int camera_set_callbacks(const camera_module_callbacks_t *callbacks)
+
+/*static int camera_set_callbacks(const camera_module_callbacks_t *callbacks)
 {
     ALOGI("%s", __FUNCTION__);
     if (check_vendor_module())
         return 0;
     return gVendorModule->set_callbacks(callbacks);
-}
+}*/
 
 static void camera_enable_msg_type(struct camera_device *device,
         int32_t msg_type)
