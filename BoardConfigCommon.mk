@@ -88,9 +88,10 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 TARGET_CAMERASERVICE_CLOSES_NATIVE_HANDLES := true
 TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
-    /vendor/bin/mm-qcamera-daemon=24 \
-    /system/bin/cameraserver=24 \
-    /system/bin/mediaserver=24
+    /vendor/bin/mm-qcamera-daemon=24 
+ 
+  #  /system/bin/cameraserver=24 \
+   # /system/bin/mediaserver=24
 
 # Display
 TARGET_USES_ION := true
@@ -101,6 +102,10 @@ TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_HWC2 := true
 TARGET_MSM8974_1440P_EGL_WORKAROUND := true
+MAX_EGL_CACHE_KEY_SIZE := 12*1024
+MAX_EGL_CACHE_SIZE := 2048*1024
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
+TARGET_USES_ION := true
 
 # Encryption
 TARGET_HW_DISK_ENCRYPTION := true
@@ -206,7 +211,7 @@ TARGET_LD_SHIM_LIBS := \
     /system/vendor/lib64/libcneapiclient.so|/system/vendor/lib64/libcne_shim.so \
     /system/vendor/lib64/libril-qc-qmi-1.so|/system/vendor/lib64/rild_socket.so \
     /system/lib64/libmdmcutback.so|libqsap_shim.so \
-    /system/vendor/lib/hw/camera.vendor.msm8992.so|/system/vendor/lib/libfence_shim.so \
+    /system/vendor/lib/hw/camera.msm8992.so|/system/vendor/lib/libfence_shim.so \
     /system/vendor/lib64/lib-rtpcore.so|/system/vendor/lib64/ims_rtp_shim.so
 
 # Thermal
